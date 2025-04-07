@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose')
 let {CreateErrorRes} = require('./utils/responseHandler')
+const { buildIndex } = require('./utils/search')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -12,9 +13,11 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 mongoose.connect("mongodb://localhost:27017/S5");
-mongoose.connection.on('connected',()=>{
-  console.log("connected");
-})
+mongoose.connection.on('connected', async () => {
+  console.log("✅ Đã kết nối MongoDB");
+  await buildIndex(); // <-- GỌI HÀM TẠO LUNR INDEX Ở ĐÂY
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -32,6 +35,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/products', require('./routes/products'));
 app.use('/categories', require('./routes/categories'));
 app.use('/songs', require('./routes/songs'));
+app.use('/search', require('./routes/searchs'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -10,7 +10,8 @@ let songSchema = new mongoose.Schema({
     duration: { type: Number },
     favorite: { type: String, default: "false" },
     counter: { type: Number, default: 0 },
-    replay: { type: Number, default: 0 }
+    replay: { type: Number, default: 0 },
+    lyrics: { type: String, default: "" }
 });
 
 const Song = mongoose.model('Song', songSchema);
