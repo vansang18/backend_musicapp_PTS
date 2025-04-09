@@ -37,6 +37,7 @@ app.use('/categories', require('./routes/categories'));
 app.use('/songs', require('./routes/songs'));
 app.use('/search', require('./routes/searchs'));
 app.use('/artist', require('./routes/artist'));
+app.use('/playlist', require('./routes/playlist'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -1,9 +1,9 @@
 let express = require('express');
 let router = express.Router();
 let Artist = require('../schemas/artist');
-let handle = require('../utils/responseHandler'); // Đường dẫn tùy bạn
+let handle = require('../utils/responseHandler');
 
-// CREATE
+
 router.post('/', async (req, res) => {
   try {
     const artist = new Artist(req.body);
@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// READ all
+
 router.get('/', async (req, res) => {
   try {
     const artists = await Artist.find();
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// READ by id
+
 router.get('/:id', async (req, res) => {
   try {
     const artist = await Artist.findById(req.params.id);
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// UPDATE
+
 router.put('/:id', async (req, res) => {
   try {
     const artist = await Artist.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -46,7 +46,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE
+
 router.delete('/:id', async (req, res) => {
   try {
     const artist = await Artist.findByIdAndDelete(req.params.id);
