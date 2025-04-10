@@ -6,6 +6,8 @@ var logger = require('morgan');
 var mongoose = require('mongoose')
 let {CreateErrorRes} = require('./utils/responseHandler')
 const { buildIndex } = require('./utils/search')
+const cron = require('node-cron');
+const { scheduledCrawlAndAddSongs } = require('./utils/scheduledCrawlService'); 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,6 +18,14 @@ mongoose.connect("mongodb://localhost:27017/S5");
 mongoose.connection.on('connected', async () => {
   console.log("✅ Đã kết nối MongoDB");
   await buildIndex(); // <-- GỌI HÀM TẠO LUNR INDEX Ở ĐÂY
+});
+// Lên lịch chạy tác vụ crawl tại 12h đêm mỗi ngày (múi giờ Vietnam)
+cron.schedule('31 1 * * *', async () => {
+  console.log("✦ Scheduled crawl job running at midnight...");
+  await scheduledCrawlAndAddSongs();
+}, {
+  scheduled: true,
+  timezone: "Asia/Ho_Chi_Minh"
 });
 
 // view engine setup
