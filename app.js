@@ -20,7 +20,7 @@ mongoose.connection.on('connected', async () => {
   await buildIndex(); // <-- GỌI HÀM TẠO LUNR INDEX Ở ĐÂY
 });
 // Lên lịch chạy tác vụ crawl tại 12h đêm mỗi ngày (múi giờ Vietnam)
-cron.schedule('31 1 * * *', async () => {
+cron.schedule('53 1 * * *', async () => {
   console.log("✦ Scheduled crawl job running at midnight...");
   await scheduledCrawlAndAddSongs();
 }, {
@@ -48,6 +48,12 @@ app.use('/songs', require('./routes/songs'));
 app.use('/search', require('./routes/searchs'));
 app.use('/artist', require('./routes/artist'));
 app.use('/playlist', require('./routes/playlist'));
+
+// Thêm middleware phục vụ file tĩnh cho nhạc từ thư mục local
+const musicMiddleware = require('./utils/localmusic');
+// Nếu bạn muốn phục vụ qua URL /songss, hãy mount ở đó:
+app.use('/songss', musicMiddleware);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

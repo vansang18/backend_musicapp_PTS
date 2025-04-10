@@ -6,8 +6,9 @@ const mongoose = require('mongoose');
 
 const { fetchCookiesAndSaveToFile } = require('./getCookieService');
 const { compareSongsFromNCT } = require('./crawlSongService');
-const Song = require('../schemas/songs'); // Đường dẫn tới schema Song của bạn
+const Song = require('../schemas/songs'); // Đảm bảo đường dẫn tới schema Song chính xác
 
+// Hàm chuẩn hoá chuỗi (normalizeKeyword)
 function normalizeKeyword(keyword) {
   if (!keyword || !keyword.trim()) return "";
   return keyword.normalize('NFD')
@@ -16,13 +17,14 @@ function normalizeKeyword(keyword) {
     .toLowerCase();
 }
 
-// Hàm kiểm tra trùng lặp theo normalized title
+// Hàm kiểm tra trùng lặp trong DB theo tiêu đề normalized
 async function checkSongExists(title) {
   const normalizedTitle = normalizeKeyword(title);
   const songs = await Song.find({});
   return songs.some(song => normalizeKeyword(song.title) === normalizedTitle);
 }
 
+// Hàm downloadMp3File: Tải file mp3 từ mp3Url về thư mục "C:\Users\bdtcl\Desktop\JS\music"
 async function downloadMp3File(mp3Url) {
   try {
     const fileName = path.basename(mp3Url.split('?')[0]);
@@ -46,16 +48,17 @@ async function downloadMp3File(mp3Url) {
   }
 }
 
+// Hàm crawl và lưu bài hát vào DB
 async function scheduledCrawlAndAddSongs() {
   try {
     // (1) Cập nhật cookie
     await fetchCookiesAndSaveToFile();
 
-    // (2) Crawl bài hát (giới hạn 10 bài)
+    // (2) Crawl bài hát từ NCT (giới hạn 10 bài)
     const crawledSongs = await compareSongsFromNCT();
     console.log("Crawled Songs:", crawledSongs);
 
-    // (3) Với mỗi bài có status "Add", tải về và kiểm tra trùng lặp DB
+    // (3) Xử lý từng bài: nếu status là "Add" thì tải file và lưu vào DB
     for (const songData of crawledSongs) {
       if (songData.status && songData.status.toLowerCase() === 'add') {
         const title = songData.title;
@@ -74,9 +77,9 @@ async function scheduledCrawlAndAddSongs() {
           continue;
         }
 
-        const sourceUrl = "http://10.0.2.2:3000/songs/" + fileName;
+        const sourceUrl = "http://10.0.2.2:3000/songss/" + fileName;
 
-        // Kiểm tra trùng lặp bằng cách tải toàn bộ bài từ DB và so sánh normalized title
+        // Kiểm tra trùng lặp bằng cách so sánh normalized title
         const exists = await checkSongExists(title);
         if (exists) {
           console.log(`Skip (already exists): ${title}`);
@@ -104,16 +107,8 @@ async function scheduledCrawlAndAddSongs() {
     console.log("✅ Completed crawling & saving songs");
   } catch (err) {
     console.error("❌ Error in scheduledCrawlAndAddSongs:", err);
-  } finally {
-    // Nếu bạn muốn đóng connection sau khi hoàn tất, bạn có thể gọi:
-    // mongoose.connection.close();
   }
 }
 
-// Kết nối MongoDB và khi mở xong thì chạy scheduledCrawlAndAddSongs
-mongoose.connect('mongodb://localhost:27017/S5')
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-    return scheduledCrawlAndAddSongs();
-  })
-  .catch(err => console.error('MongoDB connection error:', err));
+// Chỉ xuất hàm crawl, không tự chạy nó
+module.exports = { scheduledCrawlAndAddSongs };
