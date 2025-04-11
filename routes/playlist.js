@@ -6,7 +6,7 @@ let {CreateErrorRes,
     CreateSuccessRes} = require('../utils/responseHandler');
 let Playlist = require('../schemas/playlist');
 
-// ✅ Tạo playlist
+// Tạo playlist
 router.post('/', check_authentication, async (req, res) => {
     try {
         const { title, description, isPublic } = req.body;
@@ -23,7 +23,7 @@ router.post('/', check_authentication, async (req, res) => {
     }
 });
 
-// ✅ Lấy tất cả playlist của user
+// Lấy tất cả playlist của user
 router.get('/', check_authentication, async (req, res) => {
     try {
         const playlists = await Playlist.find({ createdBy: req.user._id }).populate('songs');
@@ -33,7 +33,7 @@ router.get('/', check_authentication, async (req, res) => {
     }
 });
 
-// ✅ Lấy 1 playlist
+// Lấy 1 playlist
 router.get('/:id', check_authentication, async (req, res) => {
     try {
         const playlist = await Playlist.findById(req.params.id).populate('songs');
@@ -46,7 +46,7 @@ router.get('/:id', check_authentication, async (req, res) => {
     }
 });
 
-// ✅ Thêm bài hát vào playlist
+// Thêm bài hát vào playlist
 router.post('/:id/songs', check_authentication, async (req, res) => {
     try {
         const { songId } = req.body;
@@ -65,7 +65,7 @@ router.post('/:id/songs', check_authentication, async (req, res) => {
     }
 });
 
-// ✅ Xoá bài hát khỏi playlist
+// Xoá bài hát khỏi playlist
 router.delete('/:id/songs/:songId', check_authentication, async (req, res) => {
     try {
         const { id, songId } = req.params;
@@ -82,7 +82,7 @@ router.delete('/:id/songs/:songId', check_authentication, async (req, res) => {
     }
 });
 
-// ✅ Cập nhật playlist
+// Cập nhật playlist
 router.put('/:id', check_authentication, async (req, res) => {
     try {
         const { title, description, isPublic } = req.body;
@@ -102,7 +102,7 @@ router.put('/:id', check_authentication, async (req, res) => {
     }
 });
 
-// ✅ Xoá playlist
+// Xoá playlist
 router.delete('/:id', check_authentication, async (req, res) => {
     try {
         const playlist = await Playlist.findById(req.params.id);

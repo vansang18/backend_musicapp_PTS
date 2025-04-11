@@ -42,12 +42,12 @@ async function fetchCookiesAndSaveToFile() {
       // Ghi nội dung vào file cookie.txt
       const fileContent = `thời gian: ${currentTime}\ncookie=${cookieString}\n`;
       fs.writeFileSync("cookie.txt", fileContent, "utf8");
-      console.log("✅ Cookie được lưu:", cookieString);
+      console.log("Cookie được lưu:", cookieString);
     } else {
-      console.log("⚠️ Không lấy được cookie nào!");
+      console.log("Không lấy được cookie nào!");
     }
   } catch (error) {
-    console.error("❌ Lỗi khi lấy cookie:", error);
+    console.error("Lỗi khi lấy cookie:", error);
   } finally {
     await browser.close();
   }

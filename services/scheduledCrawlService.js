@@ -69,11 +69,11 @@ async function scheduledCrawlAndAddSongs() {
         if (mp3Url) {
           fileName = await downloadMp3File(mp3Url);
           if (!fileName) {
-            console.log(`❌ Không tải được file mp3 cho bài: ${title}`);
+            console.log(`Không tải được file mp3 cho bài: ${title}`);
             continue;
           }
         } else {
-          console.log(`❌ Không có mp3_url cho bài: ${title}`);
+          console.log(`Không có mp3_url cho bài: ${title}`);
           continue;
         }
 
@@ -104,9 +104,9 @@ async function scheduledCrawlAndAddSongs() {
         console.log(`Added song: ${title} - ${sourceUrl}`);
       }
     }
-    console.log("✅ Completed crawling & saving songs");
+    console.log("Completed crawling & saving songs");
   } catch (err) {
-    console.error("❌ Error in scheduledCrawlAndAddSongs:", err);
+    console.error("Error in scheduledCrawlAndAddSongs:", err);
   }
 }
 

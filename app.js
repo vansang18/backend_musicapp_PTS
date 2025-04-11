@@ -16,7 +16,7 @@ var app = express();
 
 mongoose.connect("mongodb://localhost:27017/S5");
 mongoose.connection.on('connected', async () => {
-  console.log("✅ Đã kết nối MongoDB");
+  console.log("Đã kết nối MongoDB");
   await buildIndex(); // <-- GỌI HÀM TẠO LUNR INDEX Ở ĐÂY
 });
 // Lên lịch chạy tác vụ crawl tại 12h đêm mỗi ngày (múi giờ Vietnam)

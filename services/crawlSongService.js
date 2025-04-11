@@ -4,13 +4,10 @@ const { parseStringPromise } = require('xml2js');
 const fs = require('fs');
 const mongoose = require('mongoose');
 
-// Kết nối MongoDB (điều chỉnh connection string nếu cần)
-mongoose.connect("mongodb://localhost:27017/S5");
-mongoose.connection.on('connected', async () => {
-  console.log("✅ Đã kết nối MongoDB")
-});
 
-// Import model Song (đảm bảo đường dẫn khớp với file của bạn)
+
+
+
 let Song = require('../schemas/songs');
 
 /**
@@ -47,7 +44,7 @@ function readCookiesFromFile(filePath) {
       }
     }
   } catch (error) {
-    console.error("❌ Không thể đọc cookie từ file:", error.message);
+    console.error("Không thể đọc cookie từ file:", error.message);
   }
   return cookies;
 }
@@ -151,7 +148,7 @@ async function compareSongsFromNCT() {
             }
           }
         } catch (err) {
-          songData.status = "❌ Error getting mp3";
+          songData.status = "Error getting mp3";
           songData.error = err.message;
         }
       }
@@ -159,7 +156,7 @@ async function compareSongsFromNCT() {
       counter++;
     }
   } catch (err) {
-    console.error("❌ Error during crawling:", err.message);
+    console.error("Error during crawling:", err.message);
     return { error: err.message };
   }
   return resultArray;
