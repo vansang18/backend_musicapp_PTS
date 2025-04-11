@@ -7,7 +7,7 @@ var mongoose = require('mongoose')
 let {CreateErrorRes} = require('./utils/responseHandler')
 const { buildIndex } = require('./utils/search')
 const cron = require('node-cron');
-const { scheduledCrawlAndAddSongs } = require('./utils/scheduledCrawlService'); 
+const { scheduledCrawlAndAddSongs } = require('./services/scheduledCrawlService'); 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
